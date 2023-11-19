@@ -1,0 +1,343 @@
+<main class="content">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="card flex-fill">
+                <div class="card-body d-flex">
+                    <div class="align-self-center w-100">
+                        <h4>BÁN HÀNG TẠI QUẦY</h4>
+                        <ul class="nav nav-tabs pb-4" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation" ng-repeat="hoaDon in listHoaDon | filter: 0">
+                                <button class="nav-link" id="{{hoaDon.ma}}" data-bs-toggle="tab"
+                                    data-bs-target="#{{hoaDon.ma}}*" type="button" role="tab"
+                                    ng-click="getIdHoaDon(hoaDon.id,hoaDon.ma)" aria-controls="{{hoaDon.ma}}"
+                                    aria-selected="?true:false">{{hoaDon.ma}}
+                                </button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" type="button" role="tab" ng-click="addHoaDon($event)"
+                                    id="liveToastBtn">Thêm
+                                    Hóa
+                                    Đơn</button>
+                            </li>
+                        </ul>
+                        <div class=" d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                data-bs-target="#addSanPham">Thêm
+                                Sản Phẩm
+                            </button>
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                aria-labelledby="pills-home-tab" tabindex="0"></div>
+                            <div class="tab-pane fade" ng-repeat="hoaDon in listHoaDon" id="{{hoaDon.ma}}*"
+                                role="tabpanel" aria-labelledby="{{hoaDon.ma}}" tabindex="0">
+                                <table class="table align-self-center">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Ảnh Sản Phẩm</th>
+                                            <th scope="col">Tên Sản Phẩm</th>
+                                            <th scope="col">Số Lượng</th>
+                                            <th scope="col">Đơn Giá</th>
+                                            <th scope="col">Thành Tiền</th>
+                                            <th scope="col">Thao Tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="hoaDonChiTiet in listHoaDonChiTiet">
+                                        <tr>
+                                            <th scope="row">{{$index+1}}</th>
+                                            <th scope="row"><img class="table_img"
+                                                    src="../../../assets/{{hoaDonChiTiet.duongDan}}" alt="Không có ảnh">
+                                            </th>
+                                            <th scope="row">{{hoaDonChiTiet.tenSanPham}} [ {{hoaDonChiTiet.tenMauSac}} -
+                                                {{hoaDonChiTiet.tenKichThuoc}} ]</th>
+                                            <th scope="row">
+                                                <input type="number" ng-model="listHoaDonChiTiet[$index].soLuong"
+                                                    ng-change="changeSoLuong($index,hoaDonChiTiet.idHoaDonChiTiet)"
+                                                    class="form-control form-control-sm"
+                                                    style="width: 100px; height: 30px;" />
+                                            </th>
+                                            <th scope="row">{{hoaDonChiTiet.donGia | number}} VND</th>
+                                            <th scope="row">{{hoaDonChiTiet.thanhTien | number}} VND</th>
+
+                                            <th>
+                                                <a ng-click="xoaSanPhamGioHang(hoaDonChiTiet.idHoaDonChiTiet)">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <nav aria-label="Page navigation example ">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item">
+                                            <a class="page-link" ng-click="previousPage()" aria-label="Previous">
+                                                <span aria-hidden="true">
+                                                    << </span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item" ng-repeat="page in totalPages track by $index"
+                                            ng-click="changePage($index);">
+                                            <a class="page-link">{{$index+1}}</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" ng-click="nextPage()">>></a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <div class="modal fade" id="addSanPham" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Ảnh Đại Diện</th>
+                                                        <th scope="col">Tên Sản Phẩm</th>
+                                                        <th scope="col">Số Lượng</th>
+                                                        <th scope="col">Đơn Giá</th>
+                                                        <th scope="col">Trạng Thái</th>
+                                                        <th scope="col">Thao Tác</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody ng-repeat="sanPhamChiTiet in listSanPhamChiTiet.content ">
+                                                    <tr>
+                                                        <th scope="row">{{$index+1}}</th>
+                                                        <th scope="row"><img class="table_img"
+                                                                src="../../../assets/{{sanPhamChiTiet.duongDan}}"
+                                                                alt="Không có ảnh"></th>
+                                                        <th scope="row">{{sanPhamChiTiet.tenSanPham}}
+                                                            [{{sanPhamChiTiet.tenMauSac}}
+                                                            - {{sanPhamChiTiet.tenKichThuoc}}]</th>
+                                                        <th scope="row">{{sanPhamChiTiet.soLuong}}</th>
+                                                        <th scope="row">{{sanPhamChiTiet.donGia | number}} VND</th>
+                                                        <th scope="row">
+
+                                                            <p ng-class="{' text-g ': !sanPhamChiTiet.daXoa
+                                                            ,'text-glow':sanPhamChiTiet.daXoa}">
+                                                                {{sanPhamChiTiet.daXoa?"Ngừng kinh
+                                                                Doanh":"Đang Kinh Doanh"}}
+
+                                                            </p>
+                                                        </th>
+                                                        <th>
+
+                                                            <a type="button" class="btn btn-warning "
+                                                                data-bs-dismiss="modal"
+                                                                ng-click="addSanPhamChiTiet(sanPhamChiTiet.idSanPhamChiTiet,$index)">Chọn</a>
+
+                                                        </th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <nav aria-label="Page navigation example ">
+                                                <ul class="pagination justify-content-center">
+                                                    <li class="page-item">
+                                                        <a class="page-link" ng-click="previousPage()"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">
+                                                                << </span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item" ng-repeat="page in totalPages track by $index"
+                                                        ng-click="changePage($index);">
+                                                        <a class="page-link">{{$index+1}}</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" ng-click="nextPage()">>></a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="card flex-fill">
+                <div class="card-body d-flex">
+                    <div class="align-self-center w-100">
+                        <h5>Tài Khoản</h5>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#addTaiKhoan">Chọn tài khoản</a>
+                        </div>
+                        <hr>
+                        <div class="row" ng-if="khachHangDefault">
+                            <div class="col-md-4">
+                                Tên Khách Hàng
+                            </div>
+                            <div class="col-md-4">
+                                <span>
+                                    <input disabled id="tenKhachHang" style="border: none" type="text" value="Khách Lẻ">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="chonKhachHang">
+                            <div class="col-md-4">
+                                <p> Tên Khách Hàng</p>
+                                <p> Tên Tài Khoản</p>
+                                <p>Email</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p></p>
+                                <p></p>
+                                <p></p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <div class="modal fade" id="addTaiKhoan" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h4>Tài Khoản</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                ng-click="addKhachHang($event)">Thêm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="card flex-fill">
+                <div class="card-body d-flex">
+                    <div class="align-self-center w-100">
+                        <h5>Khách Hàng</h5>
+
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <form ng-if="show">
+                                    <div class="mb-3">
+                                        <label class="form-label">Họ Và Tên</label>
+                                        <input type="text" class="form-control" ng-model="hoaDonThanhToan.tenKhachHang">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Số Điện Thoại</label>
+                                        <input type="text" class="form-control"
+                                            ng-model="hoaDonThanhToan.soDienThoaiKhachHang">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Số nhà, ngõ</label>
+                                        <input type="text" class="form-control" ng-model="formHoaDon.soNha">
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Tỉnh / Thành Phố</label>
+                                            <select ng-model="formDiaChi.tinhThanhPho" ng-click="onCityChange()"
+                                                class="browser-default custom-select">
+                                                <option hidden selected value="">Tỉnh / Thành Phố</option>
+                                                <option ng-repeat="city in cityOptions" value="{{city.code}}">
+                                                    {{city.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Quận / Huyện</label>
+                                            <select ng-model="formDiaChi.quanHuyen" ng-click="onDistrictChange()"
+                                                class="browser-default custom-select">
+                                                <option hidden selected value="">Quận / Huyện</option>
+                                                <option ng-repeat="district in districtOptions"
+                                                    value="{{district.code}}">
+                                                    {{district.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Phường / Xã </label>
+                                            <select ng-model="formDiaChi.phuongXa" ng-click="onWardChange()"
+                                                class="browser-default custom-select">
+                                                <option hidden selected value="">Phường / Xã</option>
+                                                <option ng-repeat="ward in wardOptions" value="{{ward.code}}">
+                                                    {{ward.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="col-md-5">
+                                <h4>Thông Tin Thanh Toán</h4>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" ng-model="show"
+                                        id="flexSwitchCheckDefault" ng-click="giaoHang()">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Giao Hàng</label>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <p>
+                                            <input type="text" name="" id="">
+                                        </p>
+                                        <p>Tiền Hàng</p>
+                                        <p>Phí Vận Chuyển</p>
+                                        <p>Giảm Giá</p>
+                                        <p>Tổng Số Tiền</p>
+
+                                    </div>
+                                    <div class="col-md-3">
+
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <button class="btn btn-warning">Voucher</button>
+
+                                        </p>
+                                        <p>{{tongTien | number }} VNĐ</p>
+                                        <p>?</p>
+                                        <p>?</p>
+                                        <p>{{tongTien | number }} VNĐ</p>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <button class="btn btn-primary " ng-click="thanhToan($event)">Thanh Toán</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="1500">
+            <div class="toast-body">
+                {{message}}
+                <div id="myProgress">
+                    <div id="myBar"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>

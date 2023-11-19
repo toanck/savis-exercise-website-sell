@@ -1,0 +1,310 @@
+<style>
+  .file-upload-wrapper {
+    width: 100px; /* Điều chỉnh chiều rộng theo ý muốn */
+    height: 100px; /* Điều chỉnh chiều cao theo ý muốn */
+    border-radius: 50%; /* Làm cho nút tròn */
+    overflow: hidden; /* Đảm bảo nội dung không bị tràn ra ngoài */
+  }
+
+  .file-upload {
+    width: 100%; /* Đảm bảo nút bên trong kích thước đúng */
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .input-container {
+    position: relative;
+  }
+
+  .form-control {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ccc; /* Màu và độ dày của gạch chân mặc định */
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-bottom 0.3s; /* Hiệu ứng chuyển động khi thay đổi border-bottom */
+  }
+
+  .form-control:focus {
+    border-bottom: none; /* Loại bỏ gạch chân khi ô input được focus */
+  }
+</style>
+
+<main class="content">
+  <div class="container-fluid p-0">
+    <div class="row justify-content-center">
+      <div class="card flex-fill">
+        <div class="card-body">
+          <div class="text-center">
+            <h4 class="mb-3">THÊM MỚI KHÁCH HÀNG</h4>
+          </div>
+          <div class="card-body d-flex">
+            <div class="container" align="margin-right">
+              <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                  <form>
+                    <div class="row">
+                      <div class="col-mb-12 row"></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-mb-12 row">
+                        <label class="col-sm-6 col-form-label"></label>
+                        <label class="col-sm-6 col-form-label"
+                          >Mã khách hàng</label
+                        >
+                      </div>
+                      <div class="col-mb-12 row">
+                        <div class="col-sm-6">
+                          <div class="uploadfile">
+                            <section
+                              class="p-4 d-flex justify-content-center w-100"
+                            >
+                              <div class="file-upload-wrapper">
+                                <div class="file-upload">
+                                  <div class="file-upload-message">
+                                    <i
+                                      class="fas fa-cloud-upload-alt file-upload-cloud-icon"
+                                    ></i>
+                                    <p class="file-upload-default-message">
+                                      Tải hình ảnh
+                                    </p>
+                                  </div>
+                                  <div class="file-upload-mask"></div>
+                                  <ul class="file-upload-errors"></ul>
+                                  <input
+                                    type="file"
+                                    multiple
+                                    class="file-upload-input"
+                                    id="product-image"
+                                    data-mdb-file-upload="file-upload"
+                                  />
+                                  <div class="file-upload-previews"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            aria-describedby="emailHelp"
+                            ng-model="form_kh.ma"
+                            name="manv"
+                            required
+                            disabled
+                          />
+                          <br />
+                          <label for="" class="col-sm-6 col-form-label"
+                            ><span style="color: red">*</span> Tên khách
+                            hành</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            aria-describedby="emailHelp"
+                            ng-model="form_kh.hoten"
+                            placeholder="Tên khách hàng"
+                            required
+                            name="tennv"
+                          />
+                          <span
+                            ng-hide="showTen?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Tên trống hoặc sai định dạng
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-mb-12 row">
+                        <label class="col-sm-6 col-form-label"
+                          ><span style="color: red">*</span> Email</label
+                        >
+                        <label class="col-sm-6 col-form-label"
+                          ><span style="color: red">*</span> Số điện
+                          thoại</label
+                        >
+                      </div>
+                      <div class="col-mb-12 row">
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            aria-describedby="emailHelp"
+                            ng-model="form_kh.email"
+                            required
+                            name="email"
+                            placeholder="Email"
+                          />
+                          <span
+                            ng-hide="showEmail?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Email trống hoặc sai định dạng
+                          </span>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            aria-describedby="emailHelp"
+                            ng-model="form_kh.sodienthoai"
+                            required
+                            name="sdt"
+                            placeholder="Số điện thoại"
+                          />
+                          <span
+                            ng-hide="showSdt?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Số điện thoại trống hoặc sai định dạng
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-mb-12 row">
+                        <label for="inputNbd" class="col-sm-6 col-form-label"
+                          >Giới tính</label
+                        >
+                        <label for="inputNkt" class="col-sm-6 col-form-label"
+                          >Ngày sinh</label
+                        >
+                      </div>
+                      <div class="col-mb-12 row">
+                        <div class="col-sm-6">
+                          <input
+                            type="radio"
+                            ng-model="form_kh.gioitinh"
+                            id="female"
+                            name="gender"
+                            value="false"
+                            class="form-check-input"
+                          />
+                          <label class="form-check-label"> Nữ </label>
+                          <input
+                            ng-model="form_kh.gioitinh"
+                            type="radio"
+                            id="male"
+                            name="gender"
+                            value="true"
+                            class="form-check-input"
+                          />
+                          <label class="form-check-label"> Nam </label>
+                        </div>
+                        <div class="col-sm-6">
+                          <input
+                            type="date"
+                            class="form-control"
+                            ng-model="form_kh.ngaysinh"
+                            required
+                            name="ns"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-mb-12 row">
+                        <label class="col-sm-3 col-form-label"
+                          ><span style="color: red">*</span>Số nhà</label
+                        >
+                        <label class="col-sm-3 col-form-label"
+                          ><span style="color: red">*</span>Tỉnh/Thành
+                          phố</label
+                        >
+                        <label class="col-sm-3 col-form-label"
+                          ><span style="color: red">*</span>Quận/Huyện</label
+                        >
+                        <label class="col-sm-3 col-form-label"
+                          ><span style="color: red">*</span>Phường/Xã</label
+                        >
+                      </div>
+                      <div class="col-mb-12 row">
+                        <div class="col-sm-3">
+                          <input
+                            type="text"
+                            class="form-control"
+                            ng-model="form_kh.mota"
+                            name="mota"
+                            placeholder="Số nhà"
+                          />
+                          <span
+                            ng-hide="showMota?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Số nhà trống, sai định dạng
+                          </span>
+                        </div>
+                        <div class="col-sm-3">
+                          <select name="tt" id="city" class="form-control">
+                            <option selected id="thanhpho"></option>
+                          </select>
+                          <span
+                            ng-hide="showT?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Tỉnh thành phố trống
+                          </span>
+                        </div>
+                        <div class="col-sm-3">
+                          <select class="form-control" id="district" name="qh">
+                            <option value="" selected></option>
+                          </select>
+                          <span
+                            ng-hide="showQ?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Quận huyện trống
+                          </span>
+                        </div>
+                        <div class="col-sm-3">
+                          <select class="form-control" id="ward" name="px">
+                            <option value="" selected></option>
+                          </select>
+                          <span
+                            ng-hide="showP?true:false"
+                            class="has-error"
+                            style="font-size: 70%"
+                            >Phường xã trống
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+
+                    <br />
+                    <div class="col-md-4">
+                      <a
+                        type="button"
+                        id="liveToastBtn"
+                        class="btn btn-success"
+                        ng-disabled="formAdd.$invalid"
+                        ng-click="addKhachHang($event)"
+                        >Thêm</a
+                      >
+                      <a
+                        type="button"
+                        class="btn btn-warning"
+                        href="#khach-hang/hien-thi"
+                        >Quay lại</a
+                      >
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

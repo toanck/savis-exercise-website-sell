@@ -1,0 +1,360 @@
+<main class="content">
+  <div class="container-fluid p-0">
+    <div class="row">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5 class="card-title mb-0">QUẢN LÝ KHÁCH HÀNG</h5>
+        </div>
+        <div class="card-body d-flex">
+          <div class="align-self-center w-100">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <label
+                for="file-upload"
+                class="custom-file-upload btn btn-success"
+                style="
+                  width: 120px;
+                  height: 40px;
+                  font-size: 12px;
+                  font-size: 12px;
+                "
+              >
+                Thêm Excel
+              </label>
+              <input
+                type="file"
+                id="file-upload"
+                style="display: none"
+                onchange="angular.element(this).scope().import(this.files)"
+              />
+              <a type="button" class="btn btn-primary" href="#khach-hang/add">
+                Thêm mới
+              </a>
+            </div>
+
+            <div class="search-and-radio-container">
+              <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                  type="text"
+                  ng-model="searchKeyword"
+                  placeholder="Tìm kiếm theo mã, họ tên, email, số điện thoại"
+                  class="search-input"
+                  style="width: 350px; padding: 6px"
+                />
+              </div>
+
+              <div class="radio-container">
+                <input
+                  type="radio"
+                  ng-model="selectedOption"
+                  ng-change="getKhachHang()"
+                  required
+                  id="option-all"
+                />
+                <label for="option-all">Tất cả</label>
+
+                <input
+                  type="radio"
+                  ng-model="selectedOption"
+                  value="1"
+                  ng-change="searchTT()"
+                  id="option-active"
+                  checked
+                />
+                <label for="option-active">Đang hoạt động</label>
+
+                <input
+                  type="radio"
+                  ng-model="selectedOption"
+                  value="2"
+                  ng-change="searchTT()"
+                  id="option-inactive"
+                />
+                <label for="option-inactive">Đã khóa</label>
+              </div>
+            </div>
+
+            <br />
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Ảnh</th>
+
+                  <th scope="col">Tên khách hàng</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Số điện thoại</th>
+                  <th scope="col">Ngày tham gia</th>
+                  <th scope="col">Trạng thái</th>
+                  <th scope="col">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="kh in list_kh.content">
+                  <th scope="row">{{$index+1}}</th>
+                  <td>
+                    <i
+                      ng-if="!kh.hinhAnh"
+                      style="font-size: 30px"
+                      class="fas fa-user-circle"
+                      aria-hidden="true"
+                    ></i>
+                    <img
+                      ng-if="kh.hinhAnh"
+                      src="../../../assets/{{kh.hinhAnh}}"
+                      alt="Employee Image"
+                      class="table_img"
+                    />
+                  </td>
+
+                  <th scope="row">{{kh.hoTen}}</th>
+                  <th scope="row">{{kh.email}}</th>
+                  <th scope="row">{{kh.soDienThoai}}</th>
+                  <th scope="row">
+                    {{kh.ngayTao | date: 'dd/MM/yyyy hh:mm a'}}
+                  </th>
+                  <th scope="row">
+                    <span class="text-g" ng-if="kh.trangThai==1"
+                      >Kích hoạt</span
+                    >
+                    <span class="text-glow" ng-if="kh.trangThai==2"
+                      >Đã khóa</span
+                    >
+                  </th>
+                  <th>
+                    <a
+                      type="button"
+                      class="fas fa-edit"
+                      style="font-size: 22px"
+                      aria-hidden="true"
+                      href="#khach-hang/update/{{kh.id}}"
+                    ></a>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+            <div class="no-data-message" ng-if="list_kh.content.length === 0">
+              Không tìm thấy dữ liệu phù hợp
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                      <a
+                        class="page-link"
+                        ng-click="previousPage()"
+                        aria-label="Previous"
+                      >
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li
+                      class="page-item"
+                      ng-repeat="page in getVisiblePages()"
+                      ng-class="{ 'active': page.active === 'active' }"
+                    >
+                      <a class="page-link" ng-click="changePage(page.page)"
+                        >{{ page.page }}</a
+                      >
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" ng-click="nextPage()"> &raquo; </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+              <p>Tổng số trang: {{ totalPages.length }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .checkbox-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .checkbox-item {
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  .checkbox-label {
+    display: inline-block;
+    margin-left: 5px;
+  }
+
+  .text-glow {
+    color: red; /* Màu của văn bản */
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Màu sáng, độ mờ và màu ánh sáng */
+  }
+  .text-g {
+    color: green; /* Màu của văn bản */
+    text-shadow: 0 0 10px rgba(0, 255, 17, 0.5); /* Màu sáng, độ mờ và màu ánh sáng */
+  }
+
+  /* CSS cho phần header */
+  .card-header {
+    background-color: #ffffff;
+    color: #1c1919;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .card-title {
+    font-size: 24px;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  /* CSS cho bảng dữ liệu */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .table th {
+    background-color: #f2f2f2;
+  }
+
+  .table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .pagination {
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-item {
+    list-style: none;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  .page-link:hover {
+    background-color: #0056b3;
+  }
+
+  /* CSS cho ảnh nhân viên */
+  img.employee-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 50%;
+  }
+  /* CSS cho khung tìm kiếm và radio buttons */
+  .search-and-radio-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 5px 10px;
+    transition: border-color 0.3s;
+  }
+
+  .search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+  }
+
+  .search-icon {
+    margin-right: 10px;
+    color: #333;
+    font-size: 16px;
+  }
+
+  .radio-container {
+    display: flex;
+    align-items: center;
+    margin-left: 50px; /* Điều chỉnh khoảng cách giữa khung tìm kiếm và radio buttons */
+  }
+
+  /* Thay đổi màu khi focus vào khung tìm kiếm */
+  .search-container:focus-within {
+    border-color: #2563a1;
+  }
+
+  /* Ẩn radio buttons */
+  .radio-container input[type="radio"] {
+    display: none;
+  }
+
+  /* Tạo sự tương tác với label */
+  .radio-container label {
+    padding: 5px 10px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  /* Tô màu khi radio được chọn */
+  .radio-container input[type="radio"]:checked + label {
+    background-color: #726e6e;
+    color: #fff;
+    border-color: #646667;
+  }
+
+  /* Thay đổi màu khi hover vào label */
+  .radio-container label:hover {
+    border-color: #2563a1;
+    color: #fff;
+  }
+  .no-data-message {
+    text-align: center; /* Căn giữa theo chiều ngang */
+    margin-top: 20px; /* Điều chỉnh khoảng cách từ trên xuống để căn giữa theo chiều dọc */
+    font-size: 20px; /* Tùy chỉnh kích thước chữ */
+    color: rgb(112, 111, 111); /* Tùy chỉnh màu sắc chữ */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Tạo hiệu ứng glow */
+  }
+  /* Ẩn trường input file gốc */
+  input[type="file"] {
+    display: none;
+  }
+
+  /* Tùy chỉnh nút tải lên */
+  .custom-file-upload {
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: rgb(26, 208, 26);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  /* Khi hover trên nút tải lên */
+  .custom-file-upload:hover {
+    background-color: rgb(26, 208, 26);
+  }
+  .table_img {
+    border-radius: 50%; /* Đặt bán kính là 50% để biến ảnh thành hình tròn */
+    width: 40px; /* Điều chỉnh kích thước theo nhu cầu của bạn */
+    height: 40px; /* Điều chỉnh kích thước theo nhu cầu của bạn */
+  }
+</style>
